@@ -1,0 +1,54 @@
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Operating system
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Python testing / cache
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+# AI / Vector database
+# =========================
+chroma/
+vectorstore/
+
+# =========================
+# Generated data
+# =========================
+*.tmp
+*.cache
