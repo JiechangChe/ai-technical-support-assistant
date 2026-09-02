@@ -34,3 +34,27 @@ def create_message(
     db.refresh(new_message)
 
     return new_message
+
+def get_messages(
+    db: Session,
+    conversation_id: int,
+):
+    conversation_statement = select(Conversation).where(
+        Conversation.id == conversation_id
+    )
+
+    conversation = db.execute(
+        conversation_statement
+    ).scalar_one_or_none()
+    #return none if no such conversation exist
+    if conversation is None: 
+        return None
+
+    statement = (
+        select(Message)
+        .where(Message.conversation_id == conversation_id)
+        .order_by(Message.created_at.asc())
+    )
+
+    result = db.execute(statement)
+    return result.scalars().all()
