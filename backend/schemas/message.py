@@ -4,7 +4,6 @@ from pydantic import BaseModel
 
 #database model for message 
 class MessageCreate(BaseModel):
-    role: str
     content: str
 
 class MessageResponse(BaseModel):
@@ -17,3 +16,7 @@ class MessageResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class ChatResponse(BaseModel):
+    user_message: MessageResponse
+    assistant_message: MessageResponse
