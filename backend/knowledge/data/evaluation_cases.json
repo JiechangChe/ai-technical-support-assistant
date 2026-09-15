@@ -1,0 +1,103 @@
+[
+    {
+        "query": "首次登录怎么修改密码",
+        "expected_question": "系统能不能设置首次登录账号的时候强制需要更改密码呢",
+        "has_answer": true
+    },
+    {
+        "query": "客户交易条款审批不了",
+        "expected_question": "为什么我客户交易条款有审批的权限，却审批不了呢？",
+        "has_answer": true
+    },
+    {
+        "query": "业务员离职了，怎么批量变更业务员",
+        "expected_question": "业务员离职了，怎么批量变更业务员",
+        "has_answer": true
+    },
+    {
+        "query": "怎么停用货品",
+        "expected_question": "怎么停用货品",
+        "has_answer": true
+    },
+    {
+        "query": "系统显示登录上限了如何处理",
+        "expected_question": "系统显示登录上限了如何处理",
+        "has_answer": true
+    },
+    {
+        "query": "为什么货品资料明明存在，但就是查询不出来？",
+        "expected_question": "为什么货品资料明明存在，但就是查询不出来？",
+        "has_answer": true
+    },
+    {
+        "query": "新创建的仓库为什么看不到库存",
+        "expected_question": "新创建的仓库为什么看不到库存",
+        "has_answer": true
+    },
+    {
+        "query": "如何给操作员设置WMS仓库权限",
+        "expected_question": "如何给操作员设置WMS仓库权限",
+        "has_answer": true
+    },
+    {
+        "query": "出库单审批提示库存不足怎么办",
+        "expected_question": "出库单审批提示库存不足",
+        "has_answer": true
+    },
+    {
+        "query": "销售订单的交货日期可以批量修改吗",
+        "expected_question": "销售订单的交货日期可以修改吗，能批量修改吗",
+        "has_answer": true
+    },
+    {
+        "query": "第一次登录系统的时候，在哪里改密码？",
+        "expected_question": "系统能不能设置首次登录账号的时候强制需要更改密码呢",
+        "has_answer": true
+    },
+    {
+        "query": "我明明有客户交易条款的审批权限，为什么还是点不了审批？",
+        "expected_question": "为什么我客户交易条款有审批的权限，却审批不了呢？",
+        "has_answer": true
+    },
+    {
+        "query": "员工离职了，他负责的客户怎么一次性转给其他业务员？",
+        "expected_question": "业务员离职了，怎么批量变更业务员",
+        "has_answer": true
+    },
+    {
+        "query": "明明有库存，但是出库的时候系统扣不了，是怎么回事？",
+        "expected_question": "这个料有库存，怎么扣不了库存啊",
+        "has_answer": true
+    },
+    {
+        "query": "系统里的货品明明已经存在，为什么搜索的时候找不到？",
+        "expected_question": "为什么货品资料明明存在，但就是查询不出来？",
+        "has_answer": true
+    },
+    {
+        "query": "ERP系统登录不了怎么办",
+        "expected_question": null,
+        "has_answer": false
+    },
+    {
+        "query": "为什么我的电脑突然蓝屏了？",
+        "expected_question": null,
+        "has_answer": false
+    },
+    {
+        "query": "系统今天特别卡，怎么解决？",
+        "expected_question": null,
+        "has_answer": false
+    },
+    {
+        "query": "怎么给系统增加一个新的用户头像？",
+        "expected_question": null,
+        "has_answer": false
+    },
+    {
+        "query": "我想修改系统首页的背景图片，应该怎么操作？",
+        "expected_question": null,
+        "has_answer": false
+    }
+]
+

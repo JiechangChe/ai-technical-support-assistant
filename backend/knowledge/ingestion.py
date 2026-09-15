@@ -1,8 +1,4 @@
-# Load the resource excel as document, split it into chunks, embedding, save in the Chromadb
-# for constructing Construct the knowledge base
 from pathlib import Path
-
-from langchain_community.vectorstores import Chroma
 
 from knowledge.loader import (
     load_knowledge_documents,
@@ -10,8 +6,8 @@ from knowledge.loader import (
 )
 
 from knowledge.vectorstore import (
-    CHROMA_DIR,
-    get_embeddings,
+    embed_text,
+    get_chroma_collection,
 )
 
 
@@ -22,33 +18,82 @@ KNOWLEDGE_FILE = (
 )
 
 
-
 def build_vectorstore():
     print("Loading knowledge base...")
 
-    # Load document
     documents = load_knowledge_documents(
         str(KNOWLEDGE_FILE)
     )
 
-    print(f"Loaded documents: {len(documents)}")
-
-    # Split document into chunks
-    chunks = split_documents(documents)
-
-    print(f"Created chunks: {len(chunks)}")
-
-    embeddings = get_embeddings()
-
-    print("Creating Chroma vector store...")
-
-    Chroma.from_documents(
-        documents=chunks,
-        embedding=embeddings,
-        persist_directory=str(CHROMA_DIR),
+    print(
+        f"Loaded documents: {len(documents)}"
     )
 
-    print(f"Chroma database created at: {CHROMA_DIR}")
+    chunks = split_documents(documents)
+
+    print(
+        f"Created chunks: {len(chunks)}"
+    )
+
+    collection = get_chroma_collection()
+
+    # Clear existing data
+    existing = collection.get()
+
+    if existing["ids"]:
+        collection.delete(
+            ids=existing["ids"]
+        )
+
+    print("\nGenerating embeddings...")
+
+    ids = []
+    texts = []
+    embeddings = []
+    metadatas = []
+
+    for index, document in enumerate(chunks):
+
+        text = document.page_content
+
+        embedding = embed_text(text)
+
+        ids.append(
+            f"knowledge-{index}"
+        )
+
+        texts.append(text)
+
+        embeddings.append(
+            embedding
+        )
+
+        metadatas.append(
+            document.metadata
+        )
+
+    print(
+        f"Generated embeddings: {len(embeddings)}"
+    )
+
+    print("\nWriting to Chroma...")
+
+    collection.add(
+        ids=ids,
+        documents=texts,
+        embeddings=embeddings,
+        metadatas=metadatas,
+    )
+
+    print(
+        f"Chroma document count: "
+        f"{collection.count()}"
+    )
+
+    print(
+        f"Chroma database created at: "
+        f"{Path(__file__).parent / 'chroma_db'}"
+    )
 
 
 if __name__ == "__main__":

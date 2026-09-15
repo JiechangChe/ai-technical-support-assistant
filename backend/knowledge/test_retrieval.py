@@ -1,23 +1,75 @@
-from knowledge.retrieval import retrieve_documents
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from sentence_transformers import SentenceTransformer
+
+import numpy as np
 
 
-def main():
-    query = "客户交易条款审批不了"
+MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
-    docs = retrieve_documents(
-        query,
-        k=20,
+text = "新创建的仓库为什么看不到库存"
+
+
+def cosine_similarity(a, b):
+    a = np.array(a)
+    b = np.array(b)
+
+    return np.dot(a, b) / (
+        np.linalg.norm(a) * np.linalg.norm(b)
     )
 
-    print(f"\nQuery: {query}")
-    print(f"Retrieved documents: {len(docs)}")
 
-    for i, doc in enumerate(docs, start=1):
-        print("\n" + "=" * 60)
-        print(f"Document {i}")
-        print("=" * 60)
-        print(doc.page_content)
+print("=" * 60)
+print("Embedding Implementation Comparison")
+print("=" * 60)
 
 
-if __name__ == "__main__":
-    main()
+# --------------------------------------------------
+# 1. SentenceTransformer
+# --------------------------------------------------
+
+sentence_model = SentenceTransformer(MODEL_NAME)
+
+sentence_embedding = sentence_model.encode(text)
+
+
+# --------------------------------------------------
+# 2. LangChain HuggingFaceEmbeddings
+# --------------------------------------------------
+
+langchain_embeddings = HuggingFaceEmbeddings(
+    model_name=MODEL_NAME
+)
+
+langchain_embedding = (
+    langchain_embeddings.embed_query(text)
+)
+
+
+# --------------------------------------------------
+# 3. Compare
+# --------------------------------------------------
+
+print("\nSentenceTransformer:")
+print(sentence_embedding[:10])
+
+print("\nLangChain HuggingFaceEmbeddings:")
+print(langchain_embedding[:10])
+
+print("\nDimensions:")
+print("SentenceTransformer:", len(sentence_embedding))
+print("LangChain:", len(langchain_embedding))
+
+print("\nCosine similarity:")
+print(
+    cosine_similarity(
+        sentence_embedding,
+        langchain_embedding,
+    )
+)
+
+print("\nEuclidean distance:")
+print(
+    np.linalg.norm(
+        sentence_embedding - langchain_embedding
+    )
+)
