@@ -1,5 +1,8 @@
 from ai.llm import llm_client
-from ai.prompts import SYSTEM_PROMPT
+from ai.prompts import (
+    SYSTEM_PROMPT,
+    QUERY_REWRITE_PROMPT,
+)
 from ai.judge import judge_answerability
 from knowledge.retrieval import retrieve_documents
 
@@ -9,10 +12,16 @@ FALLBACK_RESPONSE = (
     "请提供更具体的报错信息或问题场景，我可以进一步帮你排查。"
 )
 
+def rewrite_query(messages):
+    """
+    Rewrite the latest user question into a
+    self-contained query using conversation history.
+    """
 
-def generate_response(messages):
-    # Get the latest user question.
-    user_message = next(
+    if not messages:
+        return ""
+
+    latest_user_message = next(
         (
             message["content"]
             for message in reversed(messages)
@@ -21,17 +30,52 @@ def generate_response(messages):
         "",
     )
 
-    # Retrieve the most relevant knowledge.
+    previous_messages = messages[:-1]
+
+    if not previous_messages:
+        return latest_user_message
+
+    history_text = "\n".join(
+        f"{message['role']}: {message['content']}"
+        for message in previous_messages
+    )
+
+    prompt = (
+        QUERY_REWRITE_PROMPT
+        + "\n\n对话历史：\n"
+        + history_text
+        + "\n\n当前用户问题：\n"
+        + latest_user_message
+    )
+
+    response = llm_client.generate(
+        [
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ]
+    )
+
+    return response.strip()
+
+def generate_response(messages):
+# Rewrite the latest user question using
+    # the conversation history.
+    search_query = rewrite_query(messages)
+
+    # Retrieve relevant knowledge using
+    # the rewritten query.
     documents = retrieve_documents(
-        user_message,
+        search_query,
         k=30,
         top_k=3,
     )
 
-    # Verify whether the retrieved knowledge is
-    # actually sufficient to answer the question.
+    # Check whether the retrieved knowledge
+    # can actually answer the question.
     judge_result = judge_answerability(
-        user_message,
+        search_query,
         documents,
     )
 
